@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -19,12 +17,13 @@ import static java.util.stream.Collectors.toList;
 
 public class Games {
 
-    private static final Path CSV = Paths.get("games.csv");
+    private static final Path CSV = Paths.get("..\\games.csv");
     private static final String BUNDESLIGA = "BUNDESLIGA";
     private static final String BAYERN = "FC Bayern Muenchen";
 
     public static void main(String[] args) throws IOException {
 
+        System.out.println(CSV);
         List<Game> games = null;
         try (Stream<String> lines = Files.lines(CSV)) {
             games = lines.skip(1).map(Game::fromString).collect(toList());
