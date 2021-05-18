@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 
 public class Games {
 
-    private static final Path CSV = Paths.get("..\\games.csv");
+    private static final Path CSV = Paths.get("Games/games.csv");
     private static final String BUNDESLIGA = "BUNDESLIGA";
     private static final String BAYERN = "FC Bayern Muenchen";
 
@@ -25,12 +25,12 @@ public class Games {
 
         System.out.println(CSV);
         List<Game> games = null;
+
         try (Stream<String> lines = Files.lines(CSV)) {
             games = lines.skip(1).map(Game::fromString).collect(toList());
         } catch (Exception e) {
             throw new NoSuchElementException("No CSV file found");
         }
-
         games.forEach(System.out::println);
         System.out.println();
 
@@ -39,38 +39,38 @@ public class Games {
         // TODO: Wie viele Spiele sind Bundesliga Spiele? Bundesliga ist ein Enum, kein String. (contain BUNDESLIGA)?
         // (Lösung mit filter)
 
-        long bundesligaGameCount = -1;
+        long bundesligaGameCount = games.stream().filter(game -> game.toString().contains(BUNDESLIGA)).count();
 
         System.out.println("There were " + bundesligaGameCount + " Bundesliga games");
         System.out.println();
 
         // -------------------
 
-        // TODO: Welche Spiele sind Auswärts- und welche Heimspiele?
-        // (Lösung mit partitionBy)
-
-        Map<Boolean, List<Game>> homeAwayMap = null;
-
-        System.out.println("*** HOME ***");
-        homeAwayMap.get(true).forEach(System.out::println);
-        System.out.println("*** AWAY ***");
-        homeAwayMap.get(false).forEach(System.out::println);
-        System.out.println();
-
-        // -------------------
-
-        // TODO Gruppiere die Spiele in won, lost und draw (draw = Unentschieden)
-        // (Lösung mit groupingBy)
-
-        Map<Result, List<Game>> wonLostDrawMap = null;
-
-        System.out.println("*** WON ***");
-        wonLostDrawMap.get(Result.WON).forEach(System.out::println);
-        System.out.println("*** DRAW ***");
-        wonLostDrawMap.get(Result.DRAW).forEach(System.out::println);
-        System.out.println("*** LOST ***");
-        wonLostDrawMap.get(Result.LOST).forEach(System.out::println);
-        System.out.println();
+//        // TODO: Welche Spiele sind Auswärts- und welche Heimspiele?
+//        // (Lösung mit partitionBy)
+//
+//        Map<Boolean, List<Game>> homeAwayMap = null;
+//
+//        System.out.println("*** HOME ***");
+//        homeAwayMap.get(true).forEach(System.out::println);
+//        System.out.println("*** AWAY ***");
+//        homeAwayMap.get(false).forEach(System.out::println);
+//        System.out.println();
+//
+//        // -------------------
+//
+//        // TODO Gruppiere die Spiele in won, lost und draw (draw = Unentschieden)
+//        // (Lösung mit groupingBy)
+//
+//        Map<Result, List<Game>> wonLostDrawMap = null;
+//
+//        System.out.println("*** WON ***");
+//        wonLostDrawMap.get(Result.WON).forEach(System.out::println);
+//        System.out.println("*** DRAW ***");
+//        wonLostDrawMap.get(Result.DRAW).forEach(System.out::println);
+//        System.out.println("*** LOST ***");
+//        wonLostDrawMap.get(Result.LOST).forEach(System.out::println);
+//        System.out.println();
 
         // -------------------
 
@@ -82,7 +82,7 @@ public class Games {
 
         // TODO Wie viele Tore wurden im Durchschnitt pro Spiel erzielt? averagingDouble
         // (Lösung mit withCollectors.averagingDouble)
-        double avgGoalsPerGame2 = 0.0;
+        double avgGoalsPerGame2 = games.stream().collect(Collectors.averagingDouble(game -> game.goalCount()));
 
         System.out.printf("Average goals per game: %.2f\n", avgGoalsPerGame2);
         System.out.println();
@@ -92,7 +92,7 @@ public class Games {
         // TODO Wie viele Spiele hat Bayern München zu Hause gewonnen?
         // (home equals BAYERN)?
         // (Lösung mit double filter und count)
-        long wonHomeGamesCount = -1;
+        long wonHomeGamesCount = games.stream().filter(game -> game.getHome().equals(BAYERN)).count();
 
         System.out.println(BAYERN + " won " + wonHomeGamesCount + " games at home");
         System.out.println();
