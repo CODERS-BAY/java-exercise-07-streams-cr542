@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -101,13 +102,13 @@ public class Games {
 
         // TODO Was war das Spiel mit den wenigsten Toren? sorted findFirst
         // (Lösung mit sorted und findFirst)
-        Game leastNumberOfGoalsGame1 = null;
+        Game leastNumberOfGoalsGame1 = games.stream().sorted(Comparator.comparing(Game::goalCount)).findFirst().get();
 
         System.out.println("Game with least number of goals: " + leastNumberOfGoalsGame1);
 
         // TODO Was war das Spiel mit den wenigsten Toren? min Comparator.comparingInt
         // (Lösung mit min und Comparator.comparingInt)
-        Game leastNumberOfGoalsGame2 = null;
+        Game leastNumberOfGoalsGame2 = games.stream().min(Comparator.comparingInt(Game::goalCount)).get();
 
         System.out.println("Game with least number of goals: " + leastNumberOfGoalsGame2);
         System.out.println();
@@ -116,7 +117,7 @@ public class Games {
 
         // TODO Welche unterschiedlichen (distinct) Startzeiten gibt es?
         // (Lösung mit einem stream und Collectors.joining)
-        String startingTimesString = null;
+        String startingTimesString = "";
 
         System.out.println("Distinct starting times: " + startingTimesString);
         System.out.println();
@@ -127,7 +128,7 @@ public class Games {
         // (home equals BAYERN)?
         // (Lösung mit anyMatch)
 
-        boolean bayernWon = false;
+        boolean bayernWon = games.stream().anyMatch(game -> game.getAway().equals(BAYERN) && (game.getAwayGoals() - game.getHomeGoals()) > 1 );
 
         System.out.println("Bayern won away game with at least 2 goals difference: " + (bayernWon ? "yes" : "no"));
         System.out.println();
@@ -139,8 +140,9 @@ public class Games {
         Map<String, List<Game>> games2019ByHomeTeam = games.stream()
                 .filter(game -> game.getDate().contains("2019"))
                 .collect(Collectors.groupingBy(Game::getHome));
-        List<Game> flattenedGames = null;
+        System.out.println(games2019ByHomeTeam);
+//        List<Game> flattenedGames = games.stream().filter(game -> game.getDate().contains("2019")).flatMap().collect(Collectors.groupingBy
 
-        flattenedGames.forEach(System.out::println);
+//        flattenedGames.forEach(System.out::println);
     }
 }
