@@ -47,23 +47,23 @@ public class Games {
 
         // -------------------
 
-//        // TODO: Welche Spiele sind Auswärts- und welche Heimspiele?
-//        // (Lösung mit partitionBy)
-//
-//        Map<Boolean, List<Game>> homeAwayMap = null;
-//
-//        System.out.println("*** HOME ***");
-//        homeAwayMap.get(true).forEach(System.out::println);
-//        System.out.println("*** AWAY ***");
-//        homeAwayMap.get(false).forEach(System.out::println);
-//        System.out.println();
-//
-//        // -------------------
-//
-//        // TODO Gruppiere die Spiele in won, lost und draw (draw = Unentschieden)
-//        // (Lösung mit groupingBy)
-//
-//        Map<Result, List<Game>> wonLostDrawMap = null;
+        // TODO: Welche Spiele sind Auswärts- und welche Heimspiele?
+        // (Lösung mit partitionBy)
+
+        Map<Boolean, List<Game>> homeAwayMap = games.stream().collect(Collectors.partitioningBy(game -> game.getHome().equalsIgnoreCase(BAYERN)));
+
+        System.out.println("*** HOME ***");
+        homeAwayMap.get(true).forEach(System.out::println);
+        System.out.println("*** AWAY ***");
+        homeAwayMap.get(false).forEach(System.out::println);
+        System.out.println();
+
+        // -------------------
+
+        // TODO Gruppiere die Spiele in won, lost und draw (draw = Unentschieden)
+        // (Lösung mit groupingBy)
+
+//        Map<Result, List<Game>> wonLostDrawMap = games.stream().collect(Collectors.groupingBy());
 //
 //        System.out.println("*** WON ***");
 //        wonLostDrawMap.get(Result.WON).forEach(System.out::println);
@@ -77,7 +77,7 @@ public class Games {
 
         // TODO Wie viele Tore wurden im Durchschnitt pro Spiel erzielt? mapToInt
         // (Lösung mit mapToInt)
-        double avgGoalsPerGame1 = 0.0;
+        double avgGoalsPerGame1 = games.stream().mapToInt(game -> game.goalCount()).average().getAsDouble();
 
         System.out.printf("Average goals per game: %.2f\n", avgGoalsPerGame1);
 
@@ -117,9 +117,9 @@ public class Games {
 
         // TODO Welche unterschiedlichen (distinct) Startzeiten gibt es?
         // (Lösung mit einem stream und Collectors.joining)
-        String startingTimesString = "";
+//        String startingTimesString = games.stream().collect(Collectors.joining());
 
-        System.out.println("Distinct starting times: " + startingTimesString);
+//        System.out.println("Distinct starting times: " + startingTimesString);
         System.out.println();
 
         // -------------------
@@ -141,8 +141,10 @@ public class Games {
                 .filter(game -> game.getDate().contains("2019"))
                 .collect(Collectors.groupingBy(Game::getHome));
         System.out.println(games2019ByHomeTeam);
-//        List<Game> flattenedGames = games.stream().filter(game -> game.getDate().contains("2019")).flatMap().collect(Collectors.groupingBy
+        System.out.println();
+//        List<Game> flattenedGames = games.stream().flatMap().collect(Collectors.toList());
+        List<Game> flattenedGames = games.stream().filter(game -> game.getDate().contains("2019")).collect(Collectors.toList());
 
-//        flattenedGames.forEach(System.out::println);
+        flattenedGames.forEach(System.out::println);
     }
 }
